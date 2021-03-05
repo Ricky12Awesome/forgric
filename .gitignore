@@ -1,0 +1,4 @@
+**/build/
+**/buildOutputCleanup
+**/.gradle
+.idea/
