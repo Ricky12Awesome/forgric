@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   kotlin("jvm") version Kotlin.version
@@ -18,6 +17,7 @@ allprojects {
     maven(url = "https://libraries.minecraft.net/") { name = "Mojang" }
     maven(url = "https://kotlin.bintray.com/kotlinx/") { name = "Kotlinx" }
     maven(url = "https://thedarkcolour.github.io/KotlinForForge/") { name = "KotlinForForge" }
+    maven(url = "https://maven.terraformersmc.com/releases//") { name = "TerraformersMC" }
     maven(url = "https://jitpack.io")
     mavenCentral()
     jcenter()

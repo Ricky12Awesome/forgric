@@ -8,6 +8,8 @@ dependencies {
 
   modImplementation("net.fabricmc", "fabric-loader", Fabric.Loader.version)
 
+  modApi(Fabric.Mods.modmenu)
+
   include(project(":common"))
   api(project(":common"))
 

@@ -18,6 +18,10 @@ object Fabric {
   object YarnMappings {
     const val version = "${Minecraft.version}+build.5"
   }
+
+  object Mods {
+    const val modmenu = "com.terraformersmc:modmenu:1.16.8"
+  }
 }
 
 object Forge {

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "$modid",
+  "name": "$name",
+  "version": "$version",
+  "description": "$description",
+  "contact": {
+    "homepage": "https://github.com/Ricky12Awesome/forgric",
+    "issues": "https://github.com/Ricky12Awesome/forgric/issues",
+    "sources": "https://github.com/Ricky12Awesome/forgric"
+  },
+  "custom": {
+    "modmenu": {
+      "badges": [
+        "library"
+      ]
+    }
+  },
+  "authors": [
+    "Ricky12Awesome"
+  ],
+  "entrypoints": {
+    "main": [
+      "me.ricky.forgric.fabric.Forgric::INSTANCE"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.9.0",
+    "minecraft": "1.16.x"
+  }
+}
