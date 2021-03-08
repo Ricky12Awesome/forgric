@@ -5,14 +5,12 @@ import net.minecraft.block.AbstractBlock
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.material.MaterialColor
-import net.minecraft.item.Item
-import net.minecraft.item.ItemGroup
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
+import net.minecraft.item.*
 import net.minecraft.state.properties.BlockStateProperties
 
 open class ForgeAdaptor : Adaptor {
   override val registries: CommonRegistries = ForgeRegistries(this)
+  private val cache = mutableMapOf<Any, Any>()
 
   override fun toNativeSettings(settings: MaterialSettings): Material {
     return Material.Builder(MaterialColor.COLORS[settings.color.id]).apply {
@@ -38,32 +36,42 @@ open class ForgeAdaptor : Adaptor {
   }
 
   override fun toNativeItem(item: CommonItem): Item {
-    return when (item) {
-      is NativeItem -> item.toNativeItem() as Item
-      else -> item.settings
-        ?.let(::toNativeSettings)
-        ?.let(::Item)
-        ?: Item(Item.Properties())
-    }
+    return cache.getOrPut(item) {
+      when (item) {
+        is NativeItem -> item.toNativeItem() as Item
+        is CommonBlockItem -> BlockItem(
+          toNativeBlock(item.block),
+          item.settings?.let(::toNativeSettings) ?: Item.Properties()
+        )
+        else -> item.settings
+          ?.let(::toNativeSettings)
+          ?.let(::Item)
+          ?: Item(Item.Properties())
+      }
+    } as Item
   }
 
-  override fun toNativeBlock(block: CommonBlock): Any {
-    return when (block) {
-      is NativeBlock -> block.toNativeBlock() as Block
-      else -> block.settings
-        ?.let(::toNativeSettings)
-        ?.let(::Block)
-        ?: Block(AbstractBlock.Properties.create(Material.AIR))
-    }
+  override fun toNativeBlock(block: CommonBlock): Block {
+    return cache.getOrPut(block) {
+      when (block) {
+        is NativeBlock -> block.toNativeBlock() as Block
+        else -> block.settings
+          ?.let(::toNativeSettings)
+          ?.let(::Block)
+          ?: Block(AbstractBlock.Properties.create(Material.AIR))
+      }
+    } as Block
   }
 
   override fun toNativeItemGroup(itemGroup: CommonItemGroup): ItemGroup {
-    return when (itemGroup) {
-      is VanillaItemGroup -> ItemGroup.GROUPS.first { it.path == itemGroup.id.path }
-      is NativeItemGroup -> itemGroup.toNativeGroup() as ItemGroup
-      else -> object : ItemGroup(itemGroup.id.asTranslationString()) {
-        override fun createIcon(): ItemStack = ItemStack(itemGroup.icon?.let(::toNativeItem) ?: Items.AIR)
+    return cache.getOrPut(itemGroup) {
+      when (itemGroup) {
+        is VanillaItemGroup -> ItemGroup.GROUPS.first { it.path == itemGroup.id.path }
+        is NativeItemGroup -> itemGroup.toNativeGroup() as ItemGroup
+        else -> object : ItemGroup(itemGroup.id.asTranslationString()) {
+          override fun createIcon(): ItemStack = ItemStack(itemGroup.icon?.let(::toNativeItem) ?: Items.AIR)
+        }
       }
-    }
+    } as ItemGroup
   }
 }

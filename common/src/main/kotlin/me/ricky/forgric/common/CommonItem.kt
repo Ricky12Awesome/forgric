@@ -20,6 +20,10 @@ interface CommonItem {
   val settings: ItemSettings?
 }
 
+interface CommonBlockItem : CommonItem {
+  val block: CommonBlock
+}
+
 fun interface NativeItem : CommonItem {
   override val settings: ItemSettings? get() = null
 
@@ -27,3 +31,4 @@ fun interface NativeItem : CommonItem {
 }
 
 open class SimpleItem(override val settings: ItemSettings) : CommonItem
+open class SimpleBlockItem(override val block: CommonBlock, override val settings: ItemSettings) : CommonBlockItem

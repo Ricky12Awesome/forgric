@@ -11,3 +11,5 @@ interface CommonBlock {
 interface NativeBlock : CommonBlock {
   fun toNativeBlock(): Any
 }
+
+data class SimpleBlock(override val settings: BlockSettings) : CommonBlock

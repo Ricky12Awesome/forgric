@@ -6,13 +6,11 @@ import net.minecraft.block.AbstractBlock
 import net.minecraft.block.Block
 import net.minecraft.block.Material
 import net.minecraft.block.MaterialColor
-import net.minecraft.item.Item
-import net.minecraft.item.ItemGroup
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
+import net.minecraft.item.*
 
 open class FabricAdaptor : Adaptor {
   override val registries: FabricRegistries = FabricRegistries(this)
+  private val cache = mutableMapOf<Any, Any>()
 
   override fun toNativeSettings(settings: MaterialSettings): Material {
     return Material.Builder(MaterialColor.COLORS[settings.color.id]).apply {
@@ -38,32 +36,42 @@ open class FabricAdaptor : Adaptor {
   }
 
   override fun toNativeItem(item: CommonItem): Item {
-    return when (item) {
-      is NativeItem -> item.toNativeItem() as Item
-      else -> item.settings
-        ?.let(::toNativeSettings)
-        ?.let(::Item)
-        ?: Item(Item.Settings())
-    }
+    return cache.getOrPut(item) {
+      when (item) {
+        is NativeItem -> item.toNativeItem() as Item
+        is CommonBlockItem -> BlockItem(
+          toNativeBlock(item.block),
+          item.settings?.let(::toNativeSettings) ?: Item.Settings()
+        )
+        else -> item.settings
+          ?.let(::toNativeSettings)
+          ?.let(::Item)
+          ?: Item(Item.Settings())
+      }
+    } as Item
   }
 
   override fun toNativeBlock(block: CommonBlock): Block {
-    return when (block) {
-      is NativeBlock -> block.toNativeBlock() as Block
-      else -> block.settings
-        ?.let(::toNativeSettings)
-        ?.let(::Block)
-        ?: Block(AbstractBlock.Settings.of(Material.AIR))
-    }
+    return cache.getOrPut(block) {
+      when (block) {
+        is NativeBlock -> block.toNativeBlock() as Block
+        else -> block.settings
+          ?.let(::toNativeSettings)
+          ?.let(::Block)
+          ?: Block(AbstractBlock.Settings.of(Material.METAL))
+      }
+    } as Block
   }
 
   override fun toNativeItemGroup(itemGroup: CommonItemGroup): ItemGroup {
-    return when (itemGroup) {
-      is VanillaItemGroup -> ItemGroup.GROUPS.first { it.name == itemGroup.id.path }
-      is NativeItemGroup -> itemGroup.toNativeGroup() as ItemGroup
-      else -> FabricItemGroupBuilder.build(itemGroup.id.toNativeId()) {
-        ItemStack(itemGroup.icon?.let(::toNativeItem) ?: Items.AIR)
+    return cache.getOrPut(itemGroup) {
+      when (itemGroup) {
+        is VanillaItemGroup -> ItemGroup.GROUPS.first { it.name == itemGroup.id.path }
+        is NativeItemGroup -> itemGroup.toNativeGroup() as ItemGroup
+        else -> FabricItemGroupBuilder.build(itemGroup.id.toNativeId()) {
+          ItemStack(itemGroup.icon?.let(::toNativeItem) ?: Items.AIR)
+        }
       }
-    }
+    } as ItemGroup
   }
 }

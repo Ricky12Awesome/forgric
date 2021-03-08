@@ -1,4 +1,5 @@
 {
   "itemGroup.forgric.test_items": "Forgric Test Items",
-  "item.forgric.test_item": "Test Item"
+  "item.forgric.test_item": "Test Item",
+  "block.forgric.test_block": "Test Block"
 }

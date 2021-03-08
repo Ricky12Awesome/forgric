@@ -1,5 +1,9 @@
 package me.ricky.forgric.common
 
+data class DomainId(val namespace: String) {
+  operator fun invoke(path: String): Id = Id(namespace, path)
+}
+
 data class Id(val namespace: String, val path: String) {
   fun asTranslationString() = "$namespace.$path"
 }

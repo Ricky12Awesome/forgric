@@ -42,6 +42,10 @@ class ForgeRegistries(private val adaptor: ForgeAdaptor) : CommonRegistries {
     registries[CommonRegistries.Key.Item] = ForgeRegistry(adaptor::toNativeItem).also {
       MOD_BUS.addGenericListener(it::onRegister)
     }
+
+    registries[CommonRegistries.Key.Block] = ForgeRegistry(adaptor::toNativeBlock).also {
+      MOD_BUS.addGenericListener(it::onRegister)
+    }
   }
 
   override fun <T : Any> get(key: CommonRegistries.Key<T>): CommonRegistry<T> {
