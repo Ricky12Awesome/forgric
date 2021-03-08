@@ -3,7 +3,7 @@ package me.ricky.forgric.common
 data class ItemSettings(
   var maxCount: Int = 64,
   var maxDamage: Int = 0,
-  var group: Any? = null, // TODO Group
+  var group: CommonItemGroup? = null,
   var recipeReminder: Any? = null, // TODO Recipe Reminder
   var rarity: Any? = null, // TODO Rarity
   var foodComponent: Any? = null, // TODO Food
@@ -23,7 +23,7 @@ interface CommonItem {
 fun interface NativeItem : CommonItem {
   override val settings: ItemSettings? get() = null
 
-  fun toPlatformItem(): Any
+  fun toNativeItem(): Any
 }
 
 open class SimpleItem(override val settings: ItemSettings) : CommonItem

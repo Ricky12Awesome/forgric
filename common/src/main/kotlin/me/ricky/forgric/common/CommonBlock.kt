@@ -9,5 +9,5 @@ interface CommonBlock {
 }
 
 interface NativeBlock : CommonBlock {
-  fun totPlatformBlock(): Any
+  fun toNativeBlock(): Any
 }

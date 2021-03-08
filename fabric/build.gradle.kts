@@ -2,11 +2,20 @@ plugins {
   id("fabric-loom") version Fabric.Loom.version
 }
 
+minecraft {
+  runs {
+    all {
+      runDir = "fabric/run"
+    }
+  }
+}
+
 dependencies {
   minecraft("com.mojang", "minecraft", Minecraft.version)
   mappings("net.fabricmc", "yarn", Fabric.YarnMappings.version, classifier = "v2")
 
   modImplementation("net.fabricmc", "fabric-loader", Fabric.Loader.version)
+  modImplementation("net.fabricmc.fabric-api", "fabric-api", Fabric.API.version)
 
   modApi(Fabric.Mods.modmenu)
 

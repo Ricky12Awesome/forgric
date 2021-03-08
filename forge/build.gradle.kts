@@ -7,7 +7,7 @@ minecraft {
 
   runs {
     create("client") {
-      workingDirectory(file("run"))
+      workingDirectory(project.file("run"))
 
       property("forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP")
       property("forge.logging.console.level", "debug")

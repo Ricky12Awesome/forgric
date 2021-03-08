@@ -3,7 +3,8 @@ package me.ricky.forgric.common
 data class Id(val namespace: String, val path: String)
 
 interface CommonRegistry<T : Any> {
-  fun register(id: Id, value: T)
+  operator fun set(id: Id, value: T)
+  operator fun get(id: Id): T
 }
 
 interface CommonRegistries {

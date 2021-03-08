@@ -8,4 +8,5 @@ interface Adaptor {
   fun toNativeSettings(settings: ItemSettings): Any
   fun toNativeItem(item: CommonItem): Any
   fun toNativeBlock(block: CommonBlock): Any
+  fun toNativeItemGroup(itemGroup: CommonItemGroup): Any
 }

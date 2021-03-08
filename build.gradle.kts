@@ -1,13 +1,16 @@
+import com.github.jengelman.gradle.plugins.shadow.ShadowPlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
 
 plugins {
   kotlin("jvm") version Kotlin.version
+  id("com.github.johnrengelman.shadow") version "6.1.0"
   `maven-publish`
 }
 
 allprojects {
   apply<KotlinPluginWrapper>()
   apply<MavenPublishPlugin>()
+  apply<ShadowPlugin>()
 
   group = "me.ricky"
   version = "1.0-SNAPSHOT"

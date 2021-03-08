@@ -8,20 +8,27 @@ import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.registries.ForgeRegistryEntry
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
 
-fun Id.toPlatformId() = ResourceLocation(namespace, path)
+fun Id.toNativeId() = ResourceLocation(namespace, path)
 
 class ForgeRegistry<C : Any, T : ForgeRegistryEntry<T>>(
-  val toPlatform: (C) -> T
+  val toNative: (C) -> T,
+  val toCommon: (T) -> C = { TODO("Forge Common Adapter") },
 ) : CommonRegistry<C> {
-  private val _registered = mutableListOf<T>()
-  val registered get(): List<T> = _registered
+  private val _registered = mutableMapOf<Id, C>()
+  val registered get(): Map<Id, C> = _registered
 
-  override fun register(id: Id, value: C) {
-    _registered += toPlatform(value).setRegistryName(id.toPlatformId())
+  override fun set(id: Id, value: C) {
+    _registered[id] = value
+  }
+
+  override fun get(id: Id): C {
+    return _registered[id]!!
   }
 
   fun onRegister(event: RegistryEvent.Register<T>) {
-    registered.forEach(event.registry::register)
+    registered
+      .map { (id, value) -> toNative(value).setRegistryName(id.toNativeId()) }
+      .forEach(event.registry::register)
   }
 }
 
