@@ -1,6 +1,8 @@
 package me.ricky.forgric.common
 
-data class Id(val namespace: String, val path: String)
+data class Id(val namespace: String, val path: String) {
+  fun asTranslationString() = "$namespace.$path"
+}
 
 interface CommonRegistry<T : Any> {
   operator fun set(id: Id, value: T)

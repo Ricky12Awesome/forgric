@@ -26,6 +26,8 @@ allprojects {
     jcenter()
   }
 
+  sourceSets["main"].resources.srcDir(rootProject.file("assets"))
+
   tasks {
     compileJava {
       targetCompatibility = "1.8"

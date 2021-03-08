@@ -33,9 +33,7 @@ open class FabricAdaptor : Adaptor {
       if (settings.maxDamage > 0) maxDamage(settings.maxDamage)
       if (settings.isFireProof) fireproof()
 
-      settings.group
-        ?.let(::toNativeItemGroup)
-        ?.let(::group)
+      settings.group?.let(::toNativeItemGroup)?.let(::group)
     }
   }
 
@@ -68,6 +66,4 @@ open class FabricAdaptor : Adaptor {
       }
     }
   }
-
-
 }
